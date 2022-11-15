@@ -155,6 +155,11 @@ class ExperimentBuilder(nn.Module):
         """
         ########################################
         
+        for n, p in named_parameters:
+            n=n.replace('layer_dict.','').replace('.','_')
+            if(p.requires_grad) and ("bias" not in n):
+                layers.append(n[:n.rindex('_')])
+                all_grads.append(p.grad.abs().mean())
         
         ########################################
             
