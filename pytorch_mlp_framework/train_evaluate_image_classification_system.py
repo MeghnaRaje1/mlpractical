@@ -1,3 +1,5 @@
+import sys
+sys.path.append('/afs/inf.ed.ac.uk/user/s23/s2305829/mlpractical1')
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
@@ -44,6 +46,12 @@ test_data_loader = DataLoader(test_data, batch_size=args.batch_size, shuffle=Tru
 if args.block_type == 'conv_block':
     processing_block_type = ConvolutionalProcessingBlock
     dim_reduction_block_type = ConvolutionalDimensionalityReductionBlock
+elif args.block_type == 'conv_block_with_batchnorm':
+    processing_block_type = ConvolutionalProcessingBlock_BatchNorm
+    dim_reduction_block_type = ConvolutionalDimensionalityReductionBlock_BatchNorm
+elif args.block_type == 'conv_block_with_batchnorm_rc':
+    processing_block_type = ConvolutionalProcessingBlock_BatchNorm_RC
+    dim_reduction_block_type = ConvolutionalDimensionalityReductionBlock_BatchNorm_RC
 elif args.block_type == 'empty_block':
     processing_block_type = EmptyBlock
     dim_reduction_block_type = EmptyBlock
@@ -61,6 +69,7 @@ conv_experiment = ExperimentBuilder(network_model=custom_conv_net,
                                     experiment_name=args.experiment_name,
                                     num_epochs=args.num_epochs,
                                     weight_decay_coefficient=args.weight_decay_coefficient,
+                                    learning_rate=args.learning_rate,
                                     use_gpu=args.use_gpu,
                                     continue_from_epoch=args.continue_from_epoch,
                                     train_data=train_data_loader, val_data=val_data_loader,
